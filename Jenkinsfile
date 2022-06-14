@@ -13,7 +13,7 @@ node() {
         git branch: 'master', credentialsId: '', url: repoURL
     }
     stage('Cucumber Tests') {
-	    withMaven(){
+	    withMaven(apache-maven-3.8.6){
             sh """
 			cd ${env.WORKSPACE_LOCAL}
 			mvn clean test
