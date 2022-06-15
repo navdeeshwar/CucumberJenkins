@@ -6,7 +6,7 @@ node() {
         cleanWs()
         env.WORKSPACE_LOCAL = sh(returnStdout: true, script: 'pwd').trim()
         env.BUILD_TIME = sh(returnStdout: true, script: 'date +%F-%T').trim()
-        echo "Workspace set to:"
+        echo "Workspace set to:" + env.WORKSPACE_LOCAL
         echo "Build time:" + env.BUILD_TIME
     }
     stage('Checkout Self') {
@@ -28,7 +28,7 @@ node() {
 
 		def description = "[BUILD_URL|${env.BUILD_URL}]"
 		def labels = '["regression","automated_regression"]'
-		
+		def environment = "DEV"
 		def testExecutionFieldId = 10016
 		def projectKey = "PROY"
 		def xrayConnectorId = 'd6de8e3b-f0e8-4546-86de-33a8c6d23c7d'
@@ -38,12 +38,14 @@ node() {
 					"key": "''' + projectKey + '''"
 				},
 				"labels":''' + labels + ''',
-				
-				"summary": "Automated Regression Execution @ ''' + env.BUILD_TIME + ' ' + ''' " ,
+				"description":"''' + description + '''",
+				"summary": "Automated Regression Execution @ ''' + env.BUILD_TIME + ' ' + environment + ''' " ,
 				"issuetype": {
 				"id": "''' + testExecutionFieldId + '''"
 				},
-				"''' + testEnvironmentFieldName + '''" 
+				"''' + testEnvironmentFieldName + '''" : [
+				"''' + environment + '''"
+				]
 				}
 				}'''
 
